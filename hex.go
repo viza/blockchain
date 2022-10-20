@@ -10,40 +10,42 @@ import (
 )
 
 func main() {
+	// test vectors
 	testVector1 := []byte("ff00000000000000000000000000000000000000000000000000000000000000")
 	testVector2 := []byte("aaaa000000000000000000000000000000000000000000000000000000000000")
 	testVector3 := []byte("FFFFFFFF")
 	testVector4 := []byte("F000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")
 
-	var item int8
 	fmt.Println("Please choose what do you want to convert...")
 	fmt.Println("Enter 1 - to convert hex string to little endian")
 	fmt.Println("Enter 2 - to convert hex string to big endian")
 	fmt.Println("Enter 3 - to convert little endian to hex string")
 	fmt.Println("Enter 4 - to convert big endian to hex string")
+
+	var item int8
 	fmt.Scan(&item)
 	switch item {
 	case 1: // LITTLE ENDIAN SECTION
 		fmt.Println("1 - to convert hex string to little endian")
 		byteArr := getHexByteArray() // data from console
 		fmt.Println(" - - - - - ")
-		fmt.Println("Little endian: ", ByteArrayToInt(byteArr))
+		fmt.Println("Little endian: ", byteArrayToInt(byteArr))
 		fmt.Printf(" - - - - - \n\n")
 
 		fmt.Println(" - - TEST VECTORS - - ")
 		// Good online converter: https://www.scadacore.com/tools/programming-calculators/online-hex-converter/
 
 		bin1 := makeHexByteArray(string(testVector1))
-		fmt.Printf("Byte data: %v, little endian = %d\n\n", bin1, ByteArrayToInt(bin1))
+		fmt.Printf("Byte data: %v, little endian = %d\n\n", bin1, byteArrayToInt(bin1))
 
 		bin2 := makeHexByteArray(string(testVector2))
-		fmt.Printf("Byte data: %v, little endian = %d\n\n", bin2, ByteArrayToInt(bin2))
+		fmt.Printf("Byte data: %v, little endian = %d\n\n", bin2, byteArrayToInt(bin2))
 
 		bin3 := makeHexByteArray(string(testVector3))
-		fmt.Printf("Byte data: %v, little endian = %d\n\n", bin3, ByteArrayToInt(bin3))
+		fmt.Printf("Byte data: %v, little endian = %d\n\n", bin3, byteArrayToInt(bin3))
 
 		bin4 := makeHexByteArray(string(testVector4))
-		fmt.Printf("Byte data: %v, little endian = %d\n\n", bin4, ByteArrayToInt(bin4))
+		fmt.Printf("Byte data: %v, little endian = %d\n\n", bin4, byteArrayToInt(bin4))
 
 	case 2:
 		fmt.Println("2 - to convert hex string to big endian")
@@ -51,20 +53,20 @@ func main() {
 		byteArr := getHexByteArray() // data from console
 		fmt.Println(" - - - - - ")
 
-		fmt.Println("Big endian: ", ByteArrayToInt(reverse(byteArr)))
+		fmt.Println("Big endian: ", byteArrayToInt(reverse(byteArr)))
 		fmt.Printf(" - - - - - \n\n")
 
 		bin1 := makeHexByteArray(string(testVector1))
-		fmt.Printf("Byte data: %x, big endian = %d\n\n", bin1, BytesToInt64(bin1))
+		fmt.Printf("Byte data: %x, big endian = %d\n\n", bin1, bytesToInt64(bin1))
 
 		bin2 := makeHexByteArray(string(testVector2))
-		fmt.Printf("Byte data: %x, big endian = %d\n\n", bin2, ByteArrayToInt(reverse(bin2)))
+		fmt.Printf("Byte data: %x, big endian = %d\n\n", bin2, byteArrayToInt(reverse(bin2)))
 
 		bin3 := makeHexByteArray(string(testVector3))
-		fmt.Printf("Byte data: %x, big endian = %d\n\n", bin3, ByteArrayToInt(reverse(bin3)))
+		fmt.Printf("Byte data: %x, big endian = %d\n\n", bin3, byteArrayToInt(reverse(bin3)))
 
 		bin4 := makeHexByteArray(string(testVector4))
-		fmt.Printf("Byte data: %x, big endian = %d\n\n", bin4, ByteArrayToInt(reverse(bin4)))
+		fmt.Printf("Byte data: %x, big endian = %d\n\n", bin4, byteArrayToInt(reverse(bin4)))
 
 	case 3:
 		fmt.Println("3 - to convert little endian to hex string")
@@ -98,7 +100,7 @@ func main() {
 
 }
 
-func Check(err error) {
+func checkHexString(err error) {
 	if err != nil {
 		fmt.Println("You entered invalid string...")
 		log.Fatal(err)
@@ -112,7 +114,7 @@ func reverse(b []byte) []byte {
 	return b
 }
 
-func ByteArrayToInt(arr []byte) int64 {
+func byteArrayToInt(arr []byte) int64 {
 	val := int64(0)
 	size := len(arr)
 	for i := 0; i < size; i++ {
@@ -129,7 +131,7 @@ func getHexByteArray() []byte {
 	// Convert hex representation into binary data (array of bytes)
 	binByteStr := make([]byte, hex.DecodedLen(len(hexStr)))
 	_, err := hex.Decode(binByteStr, []byte(hexStr))
-	Check(err) //check if entered hex string is OK
+	checkHexString(err) //check if entered hex string is OK
 	fmt.Printf("Hex = 0x%s\nBinary = %b\n", hexStr, binByteStr)
 
 	size := len(hexStr) / 2
@@ -141,7 +143,7 @@ func makeHexByteArray(hexStr string) []byte {
 	// Convert hex representation into binary data (array of bytes)
 	binByteStr := make([]byte, hex.DecodedLen(len(hexStr)))
 	_, err := hex.Decode(binByteStr, []byte(hexStr))
-	Check(err) //check if entered hex string is OK
+	checkHexString(err) //check if entered hex string is OK
 	fmt.Printf("Hex = 0x%s\nBinary = %b\n", hexStr, binByteStr)
 
 	size := len(hexStr) / 2
@@ -149,7 +151,7 @@ func makeHexByteArray(hexStr string) []byte {
 	return binByteStr
 }
 
-func BytesToInt64(buf []byte) int64 {
+func bytesToInt64(buf []byte) int64 {
 	return int64(binary.BigEndian.Uint64(buf))
 }
 
