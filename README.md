@@ -353,3 +353,9 @@ Enter number please. Allowed symbols are: 0123456789
 240
 Hex string: f000000000000000
 ```
+
+# Task 3
+
+SHA1 algorithm 
+
+
