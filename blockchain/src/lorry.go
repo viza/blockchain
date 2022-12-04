@@ -31,4 +31,9 @@ func main() {
 		fmt.Println("Sinature has been successfully verified!")
 	}
 
+	fmt.Println("Create account...")
+	a := lorry.Account()
+	a.GenAccount()
+	fmt.Println("Account created...")
+
 }
