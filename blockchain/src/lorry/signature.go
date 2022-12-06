@@ -45,7 +45,7 @@ func (k *keys) genKeyPair() keys {
 	publicKey := prKey.Public()
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 	if !ok {
-		log.Fatal("cannot assert type: publicKey is not of type *ecdsa.PublicKey")
+		log.Fatal("Cannot assert type: publicKey is not of type *ecdsa.PublicKey")
 	} else {
 		k.publicKey = publicKeyECDSA
 	}

@@ -8,19 +8,18 @@ import (
 func main() {
 	fmt.Println("Lorry blockchain")
 
-	// with constructor
+	// Generate keys
 	l := lorry.Signature()
 	keys := l.GenKeyPair()
 	l.PrintKeyPair(keys)
 
 	privateKey := l.GetPrivateKeyStr(keys)
 
-	data := []byte("Some TestData I would like to Sign")
+	data := []byte("Some TestData I would like to Sign!!!")
 
 	// Generate signature
 	signature := l.SignData(privateKey, data)
 
-	//publicKey := l.GetPublicKeyStr(keys)
 	publicKey := l.GetPublicKey(keys)
 
 	//Verify signature
@@ -31,9 +30,28 @@ func main() {
 		fmt.Println("Sinature has been successfully verified!")
 	}
 
-	fmt.Println("Create account...")
+	// Create account
+	//fmt.Println("Create account...")
 	a := lorry.Account()
-	a.GenAccount()
-	fmt.Println("Account created...")
+	account := a.GenAccount()
+	//	fmt.Println("Account created...")
 
+	// Get balance
+	balance := a.GetBalance(account)
+	fmt.Println("Balance: ", balance)
+
+	// Add key pair to account wallet
+	a.AddKeyPairToWallet(account, keys)
+
+	// Generate second pair of keys for testing
+	keys2 := l.GenKeyPair()
+	// Add second key pair to account wallet
+	a.AddKeyPairToWallet(account, keys2)
+
+	// Print balance
+	a.PrintBalance(account)
+
+	//Update balance
+	a.UpdateBalance(&account, 250)
+	a.PrintBalance(account)
 }
