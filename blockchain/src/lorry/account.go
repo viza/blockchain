@@ -28,7 +28,7 @@ func (*account) GenAccount() account {
 	return account{
 		accountId: "12345", //just for test, TODO: Generate unique ID
 		wallet:    keyArr,
-		balance:   100, // just for test, TODO: set up 0
+		balance:   1000, // just for test, TODO: set up 0
 	}
 }
 

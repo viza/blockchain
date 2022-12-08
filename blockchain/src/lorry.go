@@ -54,4 +54,30 @@ func main() {
 	//Update balance
 	a.UpdateBalance(&account, 250)
 	a.PrintBalance(account)
+
+	//Create operation
+
+	//Create sender account
+	senderSignature := lorry.Signature()
+	senderKeys := senderSignature.GenKeyPair()
+	senderAcc := lorry.Account()
+	senderAccount := senderAcc.GenAccount()
+	senderAcc.AddKeyPairToWallet(senderAccount, senderKeys)
+
+	//Create receiver account
+	receiverSignature := lorry.Signature()
+	receiverKeys := receiverSignature.GenKeyPair()
+	receiverAcc := lorry.Account()
+	receiverAccount := receiverAcc.GenAccount()
+	receiverAcc.AddKeyPairToWallet(receiverAccount, receiverKeys)
+
+	//Generate signature by sender
+	sendData := []byte("Some TestData I would like to Send to receiver!!!")
+
+	// Generate signature
+	signedData := senderSignature.SignData(senderKeys.GetPrivateKeyStr(senderKeys), sendData)
+
+	operation := lorry.Operation()
+	op1 := operation.CreateOperation(senderAccount, receiverAccount, signedData, 500)
+	op1.VerifyOperation(senderAccount, op1)
 }
