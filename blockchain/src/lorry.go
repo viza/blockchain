@@ -34,4 +34,8 @@ func main() {
 	// Verify operation
 	op1.VerifyOperation(senderAccount, op1, sendData)
 
+	transaction := lorry.Transaction()
+
+	transaction.CreateTransaction(op1, 150)
+
 }
