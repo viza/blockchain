@@ -36,9 +36,12 @@ func main() {
 
 	transaction := lorry.Transaction()
 
-	transaction.CreateTransaction(op1, 150)
+	trx := transaction.CreateTransaction(op1, 150)
 
 	h := lorry.Hash()
-	h.ToSHA1("Some data to sha1")
+	HashStr := h.ToSHA1("Some data to sha1")
+
+	block := lorry.Block()
+	block.CreateBlock(trx, HashStr)
 
 }

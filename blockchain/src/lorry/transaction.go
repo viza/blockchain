@@ -20,6 +20,7 @@ func Transaction() Transactioner {
 	return &transaction{
 		transationId: "",
 		operations:   operation{},
+		nonce:        0,
 	}
 }
 
