@@ -44,4 +44,7 @@ func main() {
 	block := lorry.Block()
 	block.CreateBlock(trx, HashStr)
 
+	blockchain := lorry.Blockchain()
+	blockchain.InitBlockchain()
+
 }

@@ -1,6 +1,9 @@
 package lorry
 
-import "fmt"
+import (
+	"strconv"
+	"time"
+)
 
 type block struct {
 	blockId  string
@@ -10,13 +13,12 @@ type block struct {
 
 // CreateBlock implements Blocker
 func (*block) CreateBlock(trx transaction, prevHash string) block {
-	var b block
-	fmt.Println("TODO: Create block with all necessary elements")
+	b := new(block)
+	t := time.Now().UnixNano()
+	b.blockId = strconv.FormatInt(t, 10) // TODO: just for testing purposes
 	b.prevHash = prevHash
-	b.blockId = "0001"
 	b.trx = trx
-
-	return b
+	return *b
 }
 
 type Blocker interface {

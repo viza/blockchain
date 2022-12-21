@@ -1,5 +1,7 @@
 package lorry
 
+import "fmt"
+
 type blockchain struct {
 	coinDB       []account
 	blockHistory []block
@@ -14,7 +16,23 @@ func (*blockchain) GetTokenFromFaucet(acc account, amount int) {
 
 // InitBlockchain implements Blockchainer
 func (*blockchain) InitBlockchain() blockchain {
-	panic("unimplemented")
+	fmt.Println("+++ InitBlockchain +++")
+	bc := new(blockchain)
+	block := bc.createBlock(0, "Init hash for genesis block!")
+	bc.blockHistory = append(bc.blockHistory, block)
+
+	fmt.Println("--- InitBlockchain ---")
+	return *bc
+}
+
+func (*blockchain) createBlock(nonce int, previousHash string) block {
+	t := transaction{
+		transationId: "1",
+		operations:   operation{},
+		nonce:        0,
+	}
+	b := new(block)
+	return b.CreateBlock(t, previousHash)
 }
 
 // ValidateBlock implements Blockchainer
