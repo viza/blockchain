@@ -9,6 +9,7 @@ import (
 type transaction struct {
 	transationId string
 	operations   operation
+	nonce        int
 }
 
 type Transactioner interface {
@@ -30,5 +31,5 @@ func (*transaction) CreateTransaction(opr operation, nonce int) transaction {
 	fmt.Println("  Transation id:\n   ", transactionId)
 
 	fmt.Println("--- CreateTransaction ---")
-	return transaction{transationId: transactionId, operations: opr}
+	return transaction{transationId: transactionId, operations: opr, nonce: nonce}
 }

@@ -38,4 +38,7 @@ func main() {
 
 	transaction.CreateTransaction(op1, 150)
 
+	h := lorry.Hash()
+	h.ToSHA1("Some data to sha1")
+
 }
