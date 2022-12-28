@@ -39,26 +39,14 @@ func main() {
 
 	// Create operation
 	slog.Info("Create operation")
-	operation := lorry.Operation()
-	op1 := operation.CreateOperation(senderAccount, receiverAccount, 500, sendData)
-	//op2 := operation.CreateOperation(senderAccount, receiverAccount, 800, sendData)
+	o := lorry.Operation()
+	op1 := o.CreateOperation(senderAccount, receiverAccount, 500, sendData)
+	op2 := o.CreateOperation(senderAccount, receiverAccount, 800, sendData)
 
 	// Verify operation
-	slog.Info("Verify operation")
-	op1.VerifyOperation(senderAccount, op1, sendData)
-
-	//	t := lorry.Transaction()
-	//	fmt.Println("Type:", reflects.TypeOf(t))
-
-	//	t := lorry.Transaction()
-	//	tx := t.CreateTransaction(op1, 150)
-	//	tx2 := t.CreateTransaction(op2, 200)
-
-	//	h := lorry.Hash()
-	//	HashStr := h.ToSHA1("Some data to sha1")
-
-	//b := lorry.Block()
-	//b.CreateBlock(reflects.Type{tx, tx2}, HashStr)
+	slog.Info("Verify operations")
+	o.VerifyOperation(senderAccount, op1, sendData)
+	o.VerifyOperation(senderAccount, op2, sendData)
 
 	// Create blockchain
 	slog.Info("Create blockchain")

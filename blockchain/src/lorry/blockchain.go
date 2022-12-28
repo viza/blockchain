@@ -1,6 +1,7 @@
 package lorry
 
 import (
+	"github.com/google/uuid"
 	"github.com/gookit/slog"
 )
 
@@ -30,9 +31,9 @@ func (*blockchain) CreateBlock(nonce int, previousHash string) block {
 
 	t := make([]transaction, 0, 10)
 	tx := transaction{
-		transationId: "1",
-		operations:   []operation{},
-		nonce:        0,
+		transactionId: uuid.NewString(),
+		operations:    []operation{},
+		nonce:         0,
 	}
 	t = append(t, tx)
 	b := new(block)

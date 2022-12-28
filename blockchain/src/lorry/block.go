@@ -42,8 +42,10 @@ func Block() Blocker {
 
 func (b *block) PrintBlockInfo() {
 
-	slog.Infof("Block ID:       %s", b.blockId)
-	slog.Infof("Previous Hash:  %s", b.prevHash)
-	slog.Infof("Time stamp:     %d", b.timeStamp)
-	slog.Infof("Transactions:   %p", b.tx)
+	slog.Infof("Block ID:           %s", b.blockId)
+	slog.Infof("Previous Hash:      %s", b.prevHash)
+	slog.Infof("Time stamp:         %d", b.timeStamp)
+	for index, element := range b.tx {
+		slog.Infof("Transaction [%d] Id: %s", index, element.transactionId)
+	}
 }

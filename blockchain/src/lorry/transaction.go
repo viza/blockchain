@@ -1,16 +1,14 @@
 package lorry
 
 import (
-	"math/rand"
-	"strconv"
-
+	"github.com/google/uuid"
 	"github.com/gookit/slog"
 )
 
 type transaction struct {
-	transationId string
-	operations   []operation
-	nonce        int
+	transactionId string
+	operations    []operation
+	nonce         int
 }
 
 type Transactioner interface {
@@ -19,17 +17,17 @@ type Transactioner interface {
 
 func Transaction() Transactioner {
 	return &transaction{
-		transationId: "",
-		operations:   []operation{},
-		nonce:        0,
+		transactionId: "",
+		operations:    []operation{},
+		nonce:         0,
 	}
 }
 
 // CreateTransaction - create transation
 func (*transaction) CreateTransaction(opr []operation, nonce int) transaction {
 
-	transactionId := strconv.Itoa(rand.Intn(100))
+	transactionId := uuid.New()
 	slog.Info("Transation id:   ", transactionId)
 
-	return transaction{transationId: transactionId, operations: opr, nonce: nonce}
+	return transaction{transactionId: transactionId.String(), operations: opr, nonce: nonce}
 }

@@ -1,9 +1,7 @@
 package lorry
 
 import (
-	"math/rand"
-	"strconv"
-
+	"github.com/google/uuid"
 	"github.com/gookit/slog"
 )
 
@@ -39,10 +37,8 @@ func (*account) GenAccount() account {
 	keyPair := l.GenKeyPair()
 	keyArr := []keys{keyPair}
 
-	accountId := rand.Intn(100) //TODO: rewrite with more smart generation
-	balance := rand.Intn(1000)  // TODO: generate account with zero balance
-
-	slog.Warn("TODO: implement more smart account id generation")
+	accountId := uuid.New().String()
+	balance := 0 //rand.Intn(1000) // generate account with zero balance
 
 	// Print data
 	slog.Infof("Account id:    %d", accountId)
@@ -50,7 +46,7 @@ func (*account) GenAccount() account {
 	slog.Infof("Balance:       %d", balance)
 
 	return account{
-		accountId: strconv.Itoa(accountId),
+		accountId: accountId,
 		wallet:    keyArr,
 		balance:   balance,
 	}
