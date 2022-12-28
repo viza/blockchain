@@ -18,21 +18,29 @@ func (*blockchain) GetTokenFromFaucet(acc account, amount int) {
 func (*blockchain) InitBlockchain() blockchain {
 	fmt.Println("+++ InitBlockchain +++")
 	bc := new(blockchain)
-	block := bc.createBlock(0, "Init hash for genesis block!")
+	block := bc.CreateBlock(0, "Init hash for genesis block!")
 	bc.blockHistory = append(bc.blockHistory, block)
 
 	fmt.Println("--- InitBlockchain ---")
 	return *bc
 }
 
-func (*blockchain) createBlock(nonce int, previousHash string) block {
-	t := transaction{
+func (*blockchain) CreateBlock(nonce int, previousHash string) block {
+	fmt.Println("+++ CreateBlock +++")
+
+	t := make([]transaction, 0, 10)
+	tx := transaction{
 		transationId: "1",
 		operations:   operation{},
 		nonce:        0,
 	}
+	t = append(t, tx)
 	b := new(block)
-	return b.CreateBlock(t, previousHash)
+	block := b.CreateBlock(t, previousHash)
+	block.PrintBlockInfo()
+
+	fmt.Println("--- CreateBlock ---")
+	return block
 }
 
 // ValidateBlock implements Blockchainer
@@ -50,6 +58,7 @@ type Blockchainer interface {
 	GetTokenFromFaucet(acc account, amount int)
 	ValidateBlock(b block)
 	showCoinDB()
+	CreateBlock(int, string) block
 }
 
 func Blockchain() Blockchainer {

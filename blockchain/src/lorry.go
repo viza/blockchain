@@ -30,21 +30,26 @@ func main() {
 	// Create operation
 	operation := lorry.Operation()
 	op1 := operation.CreateOperation(senderAccount, receiverAccount, 500, sendData)
+	//op2 := operation.CreateOperation(senderAccount, receiverAccount, 800, sendData)
 
 	// Verify operation
 	op1.VerifyOperation(senderAccount, op1, sendData)
 
-	transaction := lorry.Transaction()
+	//	t := lorry.Transaction()
+	//	fmt.Println("Type:", reflects.TypeOf(t))
 
-	trx := transaction.CreateTransaction(op1, 150)
+	//	t := lorry.Transaction()
+	//	tx := t.CreateTransaction(op1, 150)
+	//	tx2 := t.CreateTransaction(op2, 200)
 
-	h := lorry.Hash()
-	HashStr := h.ToSHA1("Some data to sha1")
+	//	h := lorry.Hash()
+	//	HashStr := h.ToSHA1("Some data to sha1")
 
-	block := lorry.Block()
-	block.CreateBlock(trx, HashStr)
+	//	b := lorry.Block()
+	//  b.CreateBlock(reflects.Type{tx,tx2}, HashStr)
 
 	blockchain := lorry.Blockchain()
 	blockchain.InitBlockchain()
+	blockchain.CreateBlock(0, "InitHash")
 
 }
