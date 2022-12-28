@@ -1,9 +1,10 @@
 package lorry
 
 import (
-	"fmt"
 	"math/rand"
 	"strconv"
+
+	"github.com/gookit/slog"
 )
 
 type account struct {
@@ -18,6 +19,7 @@ type Accounter interface {
 	GetBalance(account) int
 	UpdateBalance(*account, int)
 	PrintBalance(account)
+	PrintAccountInfo(account)
 }
 
 func Account() Accounter {
@@ -30,22 +32,23 @@ func Account() Accounter {
 
 // GenAccount - generate pair of keys and create account instance
 func (*account) GenAccount() account {
-	fmt.Println("+++ GenAccount +++")
+	slog.Info("Generate account")
 
 	// Generate public and private key
 	l := Signature()
 	keyPair := l.GenKeyPair()
 	keyArr := []keys{keyPair}
 
-	accountId := rand.Intn(100)
-	balance := rand.Intn(1000)
+	accountId := rand.Intn(100) //TODO: rewrite with more smart generation
+	balance := rand.Intn(1000)  // TODO: generate account with zero balance
+
+	slog.Warn("TODO: implement more smart account id generation")
 
 	// Print data
-	fmt.Printf("  Account id:\n    %d\n", accountId)
-	fmt.Printf("  Public key:\n    %s \n", keyArr[0].GetPublicKeyStr(keyPair.publicKey))
-	fmt.Printf("  Balance:\n    %d\n", balance)
+	slog.Infof("Account id:    %d", accountId)
+	slog.Infof("Public key:    %s ", keyArr[0].GetPublicKeyStr(keyPair.publicKey))
+	slog.Infof("Balance:       %d", balance)
 
-	fmt.Println("--- GenAccount  ---")
 	return account{
 		accountId: strconv.Itoa(accountId),
 		wallet:    keyArr,
@@ -53,44 +56,45 @@ func (*account) GenAccount() account {
 	}
 }
 
+func (*account) PrintAccountInfo(ac account) {
+	slog.Info("Account ID:", ac.accountId)
+	slog.Info("Balance:", ac.balance)
+
+	for index, element := range ac.wallet {
+		slog.Infof("At index %d, wallet key: %d", index, element)
+	}
+}
+
 // addKeyPairToWallet - add pair of key to account wallet
 func (*account) AddKeyPairToWallet(a account, k keys) {
-	fmt.Println("+++ AddKeyPairToWallet +++")
 	a.wallet = append(a.wallet, k)
 
-	fmt.Printf("  Public key:\n    %s\n", k.GetPublicKeyStr(k.GetPublicKey(k)))
-	fmt.Printf("  Private key:\n    %s\n", k.GetPrivateKeyStr(k.GetPrivateKey(k)))
+	slog.Infof("Public key:     %s", k.GetPublicKeyStr(k.GetPublicKey(k)))
+	slog.Infof("Private key:    %s", k.GetPrivateKeyStr(k.GetPrivateKey(k)))
 
-	fmt.Println("--- AddKeyPairToWallet ---")
 }
 
 // GetBalance - get account balance
 func (*account) GetBalance(xx account) int {
-	fmt.Println("+++ GetBalance +++")
 
-	fmt.Println("  Account id:\n   ", xx.accountId)
-	fmt.Println("  Balance:\n   ", xx.balance)
+	slog.Info("Account id:    ", xx.accountId)
+	slog.Info("Balance:       ", xx.balance)
 
-	fmt.Println("--- GetBalance ---")
 	return xx.balance
 }
 
 // UpdateBalance - update balance with new amount
 func (*account) UpdateBalance(xx *account, b int) {
-	fmt.Println("+++ UpdateBalance +++")
 
 	xx.balance = b
-	fmt.Printf("  Balance for account [%s] was updated to [%d]\n", xx.accountId, b)
+	slog.Infof("Balance for account [%s] was updated to [%d]", xx.accountId, b)
 
-	fmt.Println("--- UpdateBalance ---")
 }
 
 // PrintBalance - print account balance
 func (*account) PrintBalance(xx account) {
-	fmt.Println("+++ PrintBalance +++")
 
-	fmt.Println("  Account id:\n   ", xx.accountId)
-	fmt.Println("  Balance: \n   ", xx.balance)
+	slog.Info("Account id:     ", xx.accountId)
+	slog.Info("Balance:        ", xx.balance)
 
-	fmt.Println("--- PrintBalance ---")
 }

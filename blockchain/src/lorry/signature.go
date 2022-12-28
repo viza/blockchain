@@ -2,13 +2,12 @@ package lorry
 
 import (
 	"crypto/ecdsa"
-	"fmt"
 
 	"bytes"
-	"log"
 
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/gookit/slog"
 )
 
 type keys struct {
@@ -35,12 +34,10 @@ func Signature() Signaturer {
 }
 
 func (k *keys) genKeyPair() keys {
-	fmt.Println("+++ genKeyPair +++")
 
 	prKey, err := crypto.GenerateKey()
 	if err != nil {
-		log.Fatal(err)
-		fmt.Println("--- genKeyPair ---")
+		slog.Fatal(err)
 	} else {
 		k.privateKey = prKey
 	}
@@ -48,12 +45,11 @@ func (k *keys) genKeyPair() keys {
 	publicKey := prKey.Public()
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 	if !ok {
-		log.Fatal("  Cannot assert type: publicKey is not of type *ecdsa.PublicKey")
+		slog.Fatal("Cannot assert type: publicKey is not of type *ecdsa.PublicKey")
 	} else {
 		k.publicKey = publicKeyECDSA
 	}
 
-	fmt.Println("--- genKeyPair ---")
 	return keys{
 		privateKey: k.privateKey,
 		publicKey:  publicKeyECDSA,
@@ -68,14 +64,13 @@ func (k *keys) GenKeyPair() keys {
 
 // Prints Key Pair implements Signaturer
 func (*keys) PrintKeyPair(keys keys) {
-	fmt.Println("+++ PrintKeyPair +++")
+
 	privateKeyBytes := crypto.FromECDSA(keys.privateKey)
-	fmt.Println("  Private key: " + hexutil.Encode(privateKeyBytes)[2:])
+	slog.Info("Private key:   " + hexutil.Encode(privateKeyBytes)[2:])
 
 	publicKeyBytes := crypto.FromECDSAPub(keys.publicKey)
-	fmt.Println("  Public key: " + hexutil.Encode(publicKeyBytes)[4:])
+	slog.Info("Public key:    " + hexutil.Encode(publicKeyBytes)[4:])
 
-	fmt.Println("--- PrintKeyPair ---")
 }
 
 func (*keys) GetPrivateKeyStr(key *ecdsa.PrivateKey) string {
@@ -96,76 +91,69 @@ func (*keys) GetPrivateKey(keys keys) *ecdsa.PrivateKey {
 
 // SignData - sign data
 func (*keys) SignData(key string, data []byte) []byte {
-	fmt.Println("+++ SignData +++")
 
 	privateKey, err := crypto.HexToECDSA(key)
 	if err != nil {
-		log.Fatal(err)
+		slog.Fatal("Error during hex to ecdsa", err)
 	}
 
 	hash := crypto.Keccak256Hash(data)
-	fmt.Println(hash.Hex())
+	slog.Info("Hash:   ", hash.Hex())
 
 	signature, err := crypto.Sign(hash.Bytes(), privateKey)
 	if err != nil {
-		log.Fatal(err)
+		slog.Fatal("Error during sign", err)
 	}
 
-	fmt.Println("  Signed data: " + hexutil.Encode(signature))
+	slog.Info("Signed data:   " + hexutil.Encode(signature))
 
-	fmt.Println("--- SignData ---")
 	return signature
 }
 
 func (*keys) VerifySignature(signature []byte, publicKeyECDSA *ecdsa.PublicKey, data []byte) bool {
-	fmt.Println("+++ VerifySignature +++")
 
 	publicKey := crypto.FromECDSAPub(publicKeyECDSA)
 
 	hash := crypto.Keccak256Hash(data)
-	//fmt.Println("  Hash: ", hash.Hex())
+	slog.Info("Hash:   ", hash.Hex())
 
 	sigPublicKey, err := crypto.Ecrecover(hash.Bytes(), signature)
 	if err != nil {
-		fmt.Println("  Error during Ecrecover")
-		log.Fatal(err)
+		slog.Fatal("Error during Ecrecover", err)
 		return false
 	}
 
 	matches := bytes.Equal(sigPublicKey, publicKey)
 	if !matches {
-		fmt.Printf("  sigPublicKey (%b) != publicKey (%b)", sigPublicKey, publicKey)
-		fmt.Println("  Error during Equal")
+		slog.Errorf("sigPublicKey (%b) != publicKey (%b)", sigPublicKey, publicKey)
 		return false
 	} else {
-		fmt.Println("  Equal: ", matches) // true
+		slog.Info("Equal:   ", matches) // true
 	}
 
 	sigPublicKeyECDSA, err := crypto.SigToPub(hash.Bytes(), signature)
 	if err != nil {
-		fmt.Println("  Error during SigToPub")
-		log.Fatal(err)
+		slog.Error("Error during SigToPub", err)
 		return false
 	}
 
 	sigPublicKeyBytes := crypto.FromECDSAPub(sigPublicKeyECDSA)
 	matches = bytes.Equal(sigPublicKeyBytes, publicKey)
 	if !matches {
-		fmt.Println("  Error during Match")
+		slog.Error("Error during Match", matches)
 		return false
 	} else {
-		fmt.Println("  Match: ", matches) // true
+		slog.Info("Match:    ", matches) // true
 	}
 
 	signatureNoRecoverID := signature[:len(signature)-1] // remove recovery id
 	verified := crypto.VerifySignature(publicKey, hash.Bytes(), signatureNoRecoverID)
 	if !verified {
-		fmt.Println("  Error during VerifySignature")
+		slog.Error("Error during VerifySignature", verified)
 		return false
 	} else {
-		fmt.Println("  VerifySignature: ", verified) // true
+		slog.Info("VerifySignature: ", verified) // true
 	}
 
-	fmt.Println("--- VerifySignature ---")
 	return true
 }

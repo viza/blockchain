@@ -1,9 +1,10 @@
 package lorry
 
 import (
-	"fmt"
 	"math/rand"
 	"strconv"
+
+	"github.com/gookit/slog"
 )
 
 type transaction struct {
@@ -26,11 +27,9 @@ func Transaction() Transactioner {
 
 // CreateTransaction - create transation
 func (*transaction) CreateTransaction(opr operation, nonce int) transaction {
-	fmt.Println("+++ CreateTransaction +++")
 
 	transactionId := strconv.Itoa(rand.Intn(100))
-	fmt.Println("  Transation id:\n   ", transactionId)
+	slog.Info("Transation id:   ", transactionId)
 
-	fmt.Println("--- CreateTransaction ---")
 	return transaction{transationId: transactionId, operations: opr, nonce: nonce}
 }

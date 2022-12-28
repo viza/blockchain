@@ -1,7 +1,7 @@
 package lorry
 
 import (
-	"fmt"
+	"github.com/gookit/slog"
 )
 
 type operation struct {
@@ -27,9 +27,8 @@ func Operation() Operationer {
 
 // CreateOperation - create operation
 func (*operation) CreateOperation(sender account, receiver account, amount int, data []byte) operation {
-	fmt.Println("+++ CreateOperation +++")
 
-	fmt.Println("  Amount to send: ", amount)
+	slog.Info("Amount to send:    ", amount)
 
 	//Sign the data
 	//TODO: clarify if many private keys, which one is used for signature
@@ -37,7 +36,6 @@ func (*operation) CreateOperation(sender account, receiver account, amount int, 
 
 	//sender.wallet.GetPublicKeyStr(sender.wallet[0].GetPublicKey(sender.wallet[0]))
 
-	fmt.Println("--- CreateOperation ---")
 	return operation{
 		sender:    sender,
 		receiver:  receiver,
@@ -48,17 +46,15 @@ func (*operation) CreateOperation(sender account, receiver account, amount int, 
 
 // VerifyOperation - verify validity of operation (available balance and signature)
 func (*operation) VerifyOperation(snd account, op operation, signedData []byte) bool {
-	fmt.Println("+++ VerifyOperation +++")
 
 	balance := snd.GetBalance(snd)
-	//fmt.Println("  Balance of sender:", balance)
+	slog.Info("Balance of sender:   ", balance)
 
 	//check amount
 	if balance >= op.amount {
-		fmt.Printf("  Will be sent %d from sender with balance %d\n", op.amount, balance)
+		slog.Infof("Will be sent %d from sender with balance %d", op.amount, balance)
 	} else {
-		fmt.Println("  Not enough money on balance")
-		fmt.Println("--- VerifyOperation ---")
+		slog.Error("Not enough money on balance")
 		return false
 	}
 
@@ -66,6 +62,5 @@ func (*operation) VerifyOperation(snd account, op operation, signedData []byte) 
 		Signature().VerifySignature(op.signature, snd.wallet[i].GetPublicKey(snd.wallet[i]), signedData)
 	}
 
-	fmt.Println("--- VerifyOperation ---")
 	return true
 }

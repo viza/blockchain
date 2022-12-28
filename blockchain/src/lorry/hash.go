@@ -2,8 +2,9 @@ package lorry
 
 import (
 	"crypto/sha1"
-	"fmt"
 	"io"
+
+	"github.com/gookit/slog"
 )
 
 type hash struct {
@@ -15,7 +16,7 @@ func (*hash) ToSHA1(message string) string {
 
 	h := sha1.New()
 	io.WriteString(h, message)
-	fmt.Printf("SHA1: % x\n", h.Sum(nil))
+	slog.Infof("SHA1: % x\n", h.Sum(nil))
 	return string(h.Sum(nil))
 }
 

@@ -1,6 +1,8 @@
 package lorry
 
-import "fmt"
+import (
+	"github.com/gookit/slog"
+)
 
 type blockchain struct {
 	coinDB       []account
@@ -11,22 +13,20 @@ type blockchain struct {
 
 // GetTokenFromFaucet implements Blockchainer
 func (*blockchain) GetTokenFromFaucet(acc account, amount int) {
-	panic("unimplemented")
+	slog.Error("TODO: implement")
 }
 
 // InitBlockchain implements Blockchainer
 func (*blockchain) InitBlockchain() blockchain {
-	fmt.Println("+++ InitBlockchain +++")
 	bc := new(blockchain)
 	block := bc.CreateBlock(0, "Init hash for genesis block!")
 	bc.blockHistory = append(bc.blockHistory, block)
 
-	fmt.Println("--- InitBlockchain ---")
 	return *bc
 }
 
 func (*blockchain) CreateBlock(nonce int, previousHash string) block {
-	fmt.Println("+++ CreateBlock +++")
+	slog.Info("Create new block")
 
 	t := make([]transaction, 0, 10)
 	tx := transaction{
@@ -39,18 +39,17 @@ func (*blockchain) CreateBlock(nonce int, previousHash string) block {
 	block := b.CreateBlock(t, previousHash)
 	block.PrintBlockInfo()
 
-	fmt.Println("--- CreateBlock ---")
 	return block
 }
 
 // ValidateBlock implements Blockchainer
 func (*blockchain) ValidateBlock(b block) {
-	panic("unimplemented")
+	slog.Error("TODO: implement")
 }
 
 // showCoinDB implements Blockchainer
 func (*blockchain) showCoinDB() {
-	panic("unimplemented")
+	slog.Error("TODO: implement")
 }
 
 type Blockchainer interface {

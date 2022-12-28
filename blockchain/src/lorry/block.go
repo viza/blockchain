@@ -1,9 +1,10 @@
 package lorry
 
 import (
-	"fmt"
 	"strconv"
 	"time"
+
+	"github.com/gookit/slog"
 )
 
 type block struct {
@@ -20,6 +21,8 @@ func (*block) CreateBlock(trx []transaction, prevHash string) block {
 	b.blockId = strconv.FormatInt(b.timeStamp, 10) // TODO: just for testing purposes
 	b.prevHash = prevHash
 	b.tx = trx
+	slog.Warn("TODO: Smart block id generation")
+
 	return *b
 }
 
@@ -38,12 +41,9 @@ func Block() Blocker {
 }
 
 func (b *block) PrintBlockInfo() {
-	fmt.Println("+++ PrintBlockInfo +++")
 
-	fmt.Printf("Block ID:       %s\n", b.blockId)
-	fmt.Printf("Previous Hash:  %s\n", b.prevHash)
-	fmt.Printf("Time stamp:     %d\n", b.timeStamp)
-	fmt.Printf("Transactions:   %p\n", b.tx)
-
-	fmt.Println("--- PrintBlockInfo ---")
+	slog.Infof("Block ID:       %s", b.blockId)
+	slog.Infof("Previous Hash:  %s", b.prevHash)
+	slog.Infof("Time stamp:     %d", b.timeStamp)
+	slog.Infof("Transactions:   %p", b.tx)
 }
