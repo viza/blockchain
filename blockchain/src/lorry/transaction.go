@@ -9,24 +9,24 @@ import (
 
 type transaction struct {
 	transationId string
-	operations   operation
+	operations   []operation
 	nonce        int
 }
 
 type Transactioner interface {
-	CreateTransaction(operation, int) transaction
+	CreateTransaction([]operation, int) transaction
 }
 
 func Transaction() Transactioner {
 	return &transaction{
 		transationId: "",
-		operations:   operation{},
+		operations:   []operation{},
 		nonce:        0,
 	}
 }
 
 // CreateTransaction - create transation
-func (*transaction) CreateTransaction(opr operation, nonce int) transaction {
+func (*transaction) CreateTransaction(opr []operation, nonce int) transaction {
 
 	transactionId := strconv.Itoa(rand.Intn(100))
 	slog.Info("Transation id:   ", transactionId)

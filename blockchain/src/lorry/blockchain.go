@@ -31,7 +31,7 @@ func (*blockchain) CreateBlock(nonce int, previousHash string) block {
 	t := make([]transaction, 0, 10)
 	tx := transaction{
 		transationId: "1",
-		operations:   operation{},
+		operations:   []operation{},
 		nonce:        0,
 	}
 	t = append(t, tx)
