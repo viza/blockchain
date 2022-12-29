@@ -53,6 +53,8 @@ func main() {
 	blockchain := lorry.Blockchain()
 	blockchain.InitBlockchain()
 	b0 := blockchain.CreateBlock(0, "InitHash")
+	b1 := blockchain.CreateBlock(1, "First")
+	b1.PrintBlockInfo()
 	blockchain.ValidateBlock(b0)
 
 }

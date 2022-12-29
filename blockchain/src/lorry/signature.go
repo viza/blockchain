@@ -18,12 +18,12 @@ type keys struct {
 type Signaturer interface {
 	GenKeyPair() keys
 	PrintKeyPair(keys keys)
-	GetPrivateKeyStr(key *ecdsa.PrivateKey) string
+	GetPublicKey(keys keys) *ecdsa.PublicKey
 	GetPublicKeyStr(key *ecdsa.PublicKey) string
+	//getPrivateKey(keys keys) *ecdsa.PrivateKey
+	//getPrivateKeyStr(key *ecdsa.PrivateKey) string
 	SignData(key string, data []byte) []byte
 	VerifySignature(signature []byte, publicKeyECDSA *ecdsa.PublicKey, data []byte) bool
-	GetPublicKey(keys keys) *ecdsa.PublicKey
-	GetPrivateKey(keys keys) *ecdsa.PrivateKey
 }
 
 func Signature() Signaturer {
@@ -33,7 +33,8 @@ func Signature() Signaturer {
 	}
 }
 
-func (k *keys) genKeyPair() keys {
+// Generates Key Pair
+func (k *keys) GenKeyPair() keys {
 
 	prKey, err := crypto.GenerateKey()
 	if err != nil {
@@ -57,12 +58,7 @@ func (k *keys) genKeyPair() keys {
 
 }
 
-// Generates Key Pair implements Signaturer
-func (k *keys) GenKeyPair() keys {
-	return k.genKeyPair()
-}
-
-// Prints Key Pair implements Signaturer
+// Prints key pair (public and private keys)
 func (*keys) PrintKeyPair(keys keys) {
 
 	privateKeyBytes := crypto.FromECDSA(keys.privateKey)
@@ -73,23 +69,27 @@ func (*keys) PrintKeyPair(keys keys) {
 
 }
 
-func (*keys) GetPrivateKeyStr(key *ecdsa.PrivateKey) string {
-	return hexutil.Encode(crypto.FromECDSA(key))[2:]
-}
-
-func (*keys) GetPublicKeyStr(key *ecdsa.PublicKey) string {
-	return hexutil.Encode(crypto.FromECDSAPub(key))[4:]
-}
-
+// Gets public key in an ecdsa format
 func (*keys) GetPublicKey(keys keys) *ecdsa.PublicKey {
 	return keys.publicKey
 }
 
-func (*keys) GetPrivateKey(keys keys) *ecdsa.PrivateKey {
+// Gets public key in a string format
+func (*keys) GetPublicKeyStr(key *ecdsa.PublicKey) string {
+	return hexutil.Encode(crypto.FromECDSAPub(key))[4:]
+}
+
+// Gets private key in an ecdsa format
+func (*keys) getPrivateKey(keys keys) *ecdsa.PrivateKey {
 	return keys.privateKey
 }
 
-// SignData - sign data
+// Gets private key in a string format
+func (*keys) getPrivateKeyStr(key *ecdsa.PrivateKey) string {
+	return hexutil.Encode(crypto.FromECDSA(key))[2:]
+}
+
+// Performes a Keccak 256 hash algorithm
 func (*keys) SignData(key string, data []byte) []byte {
 
 	privateKey, err := crypto.HexToECDSA(key)
@@ -110,6 +110,7 @@ func (*keys) SignData(key string, data []byte) []byte {
 	return signature
 }
 
+// Verifies signed data
 func (*keys) VerifySignature(signature []byte, publicKeyECDSA *ecdsa.PublicKey, data []byte) bool {
 
 	publicKey := crypto.FromECDSAPub(publicKeyECDSA)

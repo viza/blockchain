@@ -32,7 +32,7 @@ func (*operation) CreateOperation(sender account, receiver account, amount int, 
 
 	//Sign the data
 	//TODO: clarify if many private keys, which one is used for signature
-	signed := Signature().SignData(sender.wallet[0].GetPrivateKeyStr(sender.wallet[0].privateKey), data)
+	signed := Signature().SignData(sender.wallet[0].getPrivateKeyStr(sender.wallet[0].privateKey), data)
 
 	//sender.wallet.GetPublicKeyStr(sender.wallet[0].GetPublicKey(sender.wallet[0]))
 

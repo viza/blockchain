@@ -41,7 +41,7 @@ func (*account) GenAccount() account {
 	balance := 0 //rand.Intn(1000) // generate account with zero balance
 
 	// Print data
-	slog.Infof("Account id:    %d", accountId)
+	slog.Infof("Account id:    %s", accountId)
 	slog.Infof("Public key:    %s ", keyArr[0].GetPublicKeyStr(keyPair.publicKey))
 	slog.Infof("Balance:       %d", balance)
 
@@ -66,7 +66,7 @@ func (*account) AddKeyPairToWallet(a account, k keys) {
 	a.wallet = append(a.wallet, k)
 
 	slog.Infof("Public key:     %s", k.GetPublicKeyStr(k.GetPublicKey(k)))
-	slog.Infof("Private key:    %s", k.GetPrivateKeyStr(k.GetPrivateKey(k)))
+	slog.Infof("Private key:    %s", k.getPrivateKeyStr(k.getPrivateKey(k)))
 
 }
 

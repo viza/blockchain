@@ -29,7 +29,7 @@ func (*blockchain) InitBlockchain() blockchain {
 func (*blockchain) CreateBlock(nonce int, previousHash string) block {
 	slog.Info("Create new block")
 
-	t := make([]transaction, 0, 10)
+	t := make([]transaction, 0, 50)
 	tx := transaction{
 		transactionId: uuid.NewString(),
 		operations:    []operation{},
@@ -38,7 +38,7 @@ func (*blockchain) CreateBlock(nonce int, previousHash string) block {
 	t = append(t, tx)
 	b := new(block)
 	block := b.CreateBlock(t, previousHash)
-	block.PrintBlockInfo()
+	//block.PrintBlockInfo()
 
 	return block
 }
