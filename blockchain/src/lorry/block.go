@@ -21,6 +21,7 @@ func (*block) CreateBlock(trx []transaction, prevHash string) block {
 	b.blockId = strconv.FormatInt(b.timeStamp, 10) // TODO: just for testing purposes
 	b.prevHash = prevHash
 	b.tx = trx
+	slog.Warn("TODO: Review: block id should be hash of related fields?!")
 
 	return *b
 }

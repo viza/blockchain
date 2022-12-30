@@ -66,6 +66,20 @@ func main() {
 
 	b1 := blockchain.CreateBlock(1, "First", trArray)
 	b1.PrintBlockInfo()
-	blockchain.ValidateBlock(b1)
-	blockchain.AddBlock2History(bc, b1)
+	if !blockchain.ValidateBlock(b1) {
+		slog.Warn("Wrong block")
+	} else {
+		blockchain.AddBlock2History(&bc, b1)
+	}
+	blockchain.SetFaucetCoins(&bc, 3000)
+	availableTokens := blockchain.GetFaucetCoins(&bc)
+
+	slog.Info("Available faucet tokens: ", availableTokens)
+	blockchain.GetTokenFromFaucet(&bc, &senderAccount, 200)
+	senderAccount.PrintAccountInfo(senderAccount)
+
+	accBal := blockchain.GetAccountBalances(&bc)
+	blockchain.ShowCoinDB(accBal) // 0 because we need to add accounts to blockchain
+
+	slog.Warn("TODO: Clarify - we need to create accounts on particular blockchain. Should be bc added as parameter during acc creation?")
 }

@@ -15,6 +15,7 @@ type hash struct {
 func (*hash) ToSHA1(message string) string {
 
 	h := sha1.New()
+	slog.Warn("TODO: Consider other sha algorithms in future")
 	io.WriteString(h, message)
 	slog.Infof("SHA1: % x\n", h.Sum(nil))
 	return string(h.Sum(nil))

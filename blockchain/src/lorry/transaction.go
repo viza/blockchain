@@ -45,6 +45,7 @@ func (*transaction) PrintTransactionInfo(t transaction) {
 		slog.Infof("Operation [%d] receiver account id = %s", index, value.receiver.accountId)
 		slog.Infof("Operation [%d] receiver balance = %d", index, value.receiver.balance)
 		slog.Infof("Operation [%d] amount to send = %d", index, value.amount)
+		slog.Warn("TODO: Add more fields & info to print")
 		// TODO: maybe add more fields to print later
 	}
 }
