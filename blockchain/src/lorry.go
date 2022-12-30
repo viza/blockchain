@@ -41,20 +41,31 @@ func main() {
 	slog.Info("Create operation")
 	o := lorry.Operation()
 	op1 := o.CreateOperation(senderAccount, receiverAccount, 500, sendData)
-	op2 := o.CreateOperation(senderAccount, receiverAccount, 800, sendData)
+	op2 := o.CreateOperation(senderAccount, receiverAccount, 300, sendData)
 
 	// Verify operation
 	slog.Info("Verify operations")
 	o.VerifyOperation(senderAccount, op1, sendData)
 	o.VerifyOperation(senderAccount, op2, sendData)
 
+	o.AddOperation(op1)
+	o.AddOperation(op2)
+	oppArray := o.GetOperationArray()
+
+	// Transactions
+	t := lorry.Transaction()
+	tr := t.CreateTransaction(oppArray, 0)
+	t.PrintTransactionInfo(tr)
+	t.AddTransaction(tr)
+	trArray := t.GetTransactionArray()
+
 	// Create blockchain
 	slog.Info("Create blockchain")
 	blockchain := lorry.Blockchain()
-	blockchain.InitBlockchain()
-	b0 := blockchain.CreateBlock(0, "InitHash")
-	b1 := blockchain.CreateBlock(1, "First")
-	b1.PrintBlockInfo()
-	blockchain.ValidateBlock(b0)
+	bc := blockchain.InitBlockchain() // Init blockchain with Genesis block
 
+	b1 := blockchain.CreateBlock(1, "First", trArray)
+	b1.PrintBlockInfo()
+	blockchain.ValidateBlock(b1)
+	blockchain.AddBlock2History(bc, b1)
 }

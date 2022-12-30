@@ -1,7 +1,6 @@
 package lorry
 
 import (
-	"github.com/google/uuid"
 	"github.com/gookit/slog"
 )
 
@@ -20,32 +19,25 @@ func (*blockchain) GetTokenFromFaucet(acc account, amount int) {
 // InitBlockchain implements Blockchainer
 func (*blockchain) InitBlockchain() blockchain {
 	bc := new(blockchain)
-	block := bc.CreateBlock(0, "Init hash for genesis block!")
+	block := bc.CreateBlock(0, "Init hash for genesis block!", nil)
 	bc.blockHistory = append(bc.blockHistory, block)
 
 	return *bc
 }
 
-func (*blockchain) CreateBlock(nonce int, previousHash string) block {
+func (*blockchain) CreateBlock(nonce int, previousHash string, txArray []transaction) block {
 	slog.Info("Create new block")
 
-	t := make([]transaction, 0, 50)
-	tx := transaction{
-		transactionId: uuid.NewString(),
-		operations:    []operation{},
-		nonce:         0,
-	}
-	t = append(t, tx)
 	b := new(block)
-	block := b.CreateBlock(t, previousHash)
+	block := b.CreateBlock(txArray, previousHash)
 	//block.PrintBlockInfo()
-
 	return block
 }
 
 // ValidateBlock implements Blockchainer
 func (*blockchain) ValidateBlock(b block) {
 	slog.Error("TODO: implement")
+
 }
 
 // showCoinDB implements Blockchainer
@@ -58,7 +50,8 @@ type Blockchainer interface {
 	GetTokenFromFaucet(acc account, amount int)
 	ValidateBlock(b block)
 	showCoinDB()
-	CreateBlock(int, string) block
+	CreateBlock(int, string, []transaction) block
+	AddBlock2History(blockchain, block)
 }
 
 func Blockchain() Blockchainer {
@@ -68,4 +61,8 @@ func Blockchain() Blockchainer {
 		txDB:         []transaction{},
 		faucetCoins:  0,
 	}
+}
+
+func (*blockchain) AddBlock2History(bc blockchain, b block) {
+	bc.blockHistory = append(bc.blockHistory, b)
 }

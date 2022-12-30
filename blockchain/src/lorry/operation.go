@@ -11,9 +11,13 @@ type operation struct {
 	signature []byte
 }
 
+var opArray []operation
+
 type Operationer interface {
 	CreateOperation(account, account, int, []byte) operation
 	VerifyOperation(account, operation, []byte) bool
+	GetOperationArray() []operation
+	AddOperation(operation)
 }
 
 func Operation() Operationer {
@@ -63,4 +67,12 @@ func (*operation) VerifyOperation(snd account, op operation, signedData []byte) 
 	}
 
 	return true
+}
+
+func (*operation) GetOperationArray() []operation {
+	return opArray
+}
+
+func (*operation) AddOperation(o operation) {
+	opArray = append(opArray, o)
 }
